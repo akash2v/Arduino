@@ -32,34 +32,27 @@ int durations[] = {
   4, 4, 4,
   2
 };
-int i = 60;
+
 void setup() {
   pinMode(BUZZER_PIN, OUTPUT);
   pinMode(LED, OUTPUT);
-};
-
-
+}
 
 void loop() {
-  for (int i = 0; i < 60; i++) {
-    digitalWrite(LED, i % 2 == 0 ? HIGH : LOW);
-    delay(500);  // Adjust the delay for visible blinking
-  }
-
-  int size = sizeof(durations) / sizeof(int);
+  int size = sizeof(durations) / sizeof(durations[0]);
 
   for (int note = 0; note < size; note++) {
-    //to calculate the note duration, take one second divided by the note type.
-    //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
     int duration = 1000 / durations[note];
+
+    // Play the note
     tone(BUZZER_PIN, melody[note], duration);
+    digitalWrite(LED, HIGH); // Turn LED ON
+    delay(duration * 1.30);  // Let the note play
 
-    //to distinguish the notes, set a minimum time between them.
-    //the note's duration + 30% seems to work well:
-    int pauseBetweenNotes = duration * 1.30;
-    delay(pauseBetweenNotes);
-
-    //stop the tone playing:
-    noTone(BUZZER_PIN);
+    digitalWrite(LED, LOW);  // Turn LED OFF
+    delay(50);  // Small gap between notes
   }
+
+  noTone(BUZZER_PIN); // Stop the buzzer
+  delay(2000); // Pause before repeating the melody
 }
